@@ -109,7 +109,7 @@ bool init (void)
 
 void cleanup (void)
 {
-    AudioUnitInstanceDispose (output_instance);
+    AudioComponentInstanceDispose (output_instance);
 }
 
 /*
@@ -146,12 +146,12 @@ bool open_audio (int format, int rate, int chan, AURenderCallbackStruct * callba
     AudioStreamBasicDescription streamFormat;
     streamFormat.mSampleRate = rate;
     streamFormat.mFormatID = kAudioFormatLinearPCM;
-    streamFormat.mFormatFlags = m->mFormatFlags;
+    streamFormat.mFormatFlags = m->flags;
     streamFormat.mFramesPerPacket = 1;
     streamFormat.mChannelsPerFrame = chan;
-    streamFormat.mBitsPerChannel = m->mBitsPerChannel;
-    streamFormat.mBytesPerPacket = chan * buffer_bytes_per_channel;
-    streamFormat.mBytesPerFrame = chan * buffer_bytes_per_channel;
+    streamFormat.mBitsPerChannel = m->bits_per_sample;
+    streamFormat.mBytesPerPacket = chan * m->bytes_per_sample;
+    streamFormat.mBytesPerFrame = chan * m->bytes_per_sample;
 
     printf ("Stream format:\n");
     printf (" Channels: %d\n", streamFormat.mChannelsPerFrame);
@@ -173,7 +173,7 @@ bool open_audio (int format, int rate, int chan, AURenderCallbackStruct * callba
 
     if (AudioOutputUnitStart (output_instance))
     {
-        fprintf ("Unable to start audio unit.\n");
+        printf ("Unable to start audio unit.\n");
         return false;
     }
 
