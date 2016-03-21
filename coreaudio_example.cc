@@ -53,7 +53,7 @@ static struct CoreAudioFormatDescriptionMap format_map[] = {
     {FMT_S16_BE, 16, sizeof (int16_t), kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian},
     {FMT_S32_LE, 32, sizeof (int32_t), kAudioFormatFlagIsSignedInteger},
     {FMT_S32_BE, 32, sizeof (int32_t), kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsBigEndian},
-    {FMT_FLOAT,  32, sizeof (float),   kAudioFormatFlagIsFloat},
+    {FMT_FLOAT,  32, sizeof (float),   kAudioFormatFlagsNativeFloatPacked | kAudioFormatFlagIsNonInterleaved},
 };
 
 /*
@@ -118,7 +118,7 @@ This gives you an output unit you can send data to using a callback. Now we
 should actually set up the unit for playback...
 */
 
-bool open_audio (int format, int rate, int chan, AURenderCallbackStruct * callback)
+bool open_audio (enum format_type format, int rate, int chan, AURenderCallbackStruct * callback)
 {
     struct CoreAudioFormatDescriptionMap * m = nullptr;
 
